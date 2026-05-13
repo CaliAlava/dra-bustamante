@@ -45,16 +45,16 @@ La paleta se centra en tonos "vino", acentos dorados/champaña, y fondos cremas 
 
 ### Tipografía
 Se cargan a través de Google Fonts.
-- **Display / Títulos:** `Cormorant Garamond`, serif (Para dar el look editorial, estético y premium).
-- **Body / Textos:** `Inter`, sans-serif (Para la legibilidad moderna y limpia en los textos).
+- **Display / Títulos:** `Playfair Display`, serif (Para dar el look editorial, estético y premium enfocado en belleza).
+- **Body / Textos:** `Montserrat`, sans-serif (Para la legibilidad moderna y limpia que complementa la elegancia).
 
 ### Interacciones y Efectos
 - **Animaciones sutiles:** Los botones tienen `transform: translateY()` y las imágenes tienen `transform: scale()` suaves al interactuar o cargar.
 - **Intersection Observer (`.reveal`):** Las secciones y tarjetas entran con `fadeUp` suave al hacer scroll.
-- **Glassmorphism / Blur:** Se utiliza `backdrop-filter: blur()` en la navegación flotante (`nav.is-scrolled`) y en ciertas etiquetas (`eyebrow`) para darle modernidad.
+- **Glassmorphism / Blur:** Se utiliza `backdrop-filter: blur()` en la caja de navegación superior flotante (`nav__inner`), la cual se adaptó para estar envuelta en una píldora con bordes redondeados y sombra.
 
 ## 5. Contacto y Redes
-El call to action principal del sitio dirige hacia WhatsApp (mediante `https://api.whatsapp.com/send`) con un mensaje predeterminado. El número y enlaces de Instagram correspondientes están quemados en el código.
+El call to action principal del sitio dirige hacia WhatsApp (mediante `https://api.whatsapp.com/send`) con un mensaje predeterminado y está presente en el menú y al final del sitio (se removió el botón flotante global para darle mayor elegancia a la interfaz). El número y enlaces de Instagram correspondientes están quemados en el código.
 
 ---
 *Última actualización: Mayo 2026*

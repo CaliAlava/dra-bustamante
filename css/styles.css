@@ -30,8 +30,8 @@
   --line: rgba(31, 19, 24, 0.12);
   --line-strong: rgba(31, 19, 24, 0.22);
 
-  --font-display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --font-body: "Montserrat", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   --shadow-sm: 0 6px 20px rgba(42, 16, 24, 0.06);
   --shadow-md: 0 18px 50px rgba(42, 16, 24, 0.12);
@@ -141,48 +141,46 @@ button { font: inherit; border: 0; background: 0; cursor: pointer; color: inheri
 }
 .btn--ghost:hover { border-color: var(--wine-700); color: var(--wine-700); }
 
-/* =========================================================
-   NAV
-   ========================================================= */
 .nav {
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 50;
-  padding: 18px var(--gutter);
-  transition: background .35s ease, padding .35s ease, box-shadow .35s ease, border-color .35s ease;
-  border-bottom: 1px solid transparent;
+  padding: 24px var(--gutter);
+  pointer-events: none;
+  transition: padding .35s ease;
 }
 .nav.is-scrolled {
-  background: rgba(251, 247, 242, 0.85);
-  backdrop-filter: saturate(140%) blur(18px);
   padding: 12px var(--gutter);
-  border-bottom-color: var(--line);
 }
 
 .nav__inner {
+  pointer-events: auto;
   max-width: var(--max);
   margin-inline: auto;
   display: grid;
   grid-template-columns: auto 1fr auto auto;
   align-items: center;
   gap: 24px;
+  background: rgba(251, 247, 242, 0.45);
+  backdrop-filter: saturate(140%) blur(16px);
+  padding: 4px 24px;
+  border-radius: 100px;
+  box-shadow: 0 8px 32px rgba(42, 16, 24, 0.08);
+  border: 1px solid rgba(217, 189, 150, 0.25);
+  transition: box-shadow .3s ease, background .3s ease;
+}
+.nav.is-scrolled .nav__inner {
+  box-shadow: 0 12px 40px rgba(42, 16, 24, 0.12);
+  background: rgba(251, 247, 242, 0.85);
 }
 
-.nav__brand { display: flex; align-items: center; gap: 12px; color: var(--ink-900); }
-.nav__brand-mark {
-  display: grid; place-items: center;
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: var(--wine-700);
-  color: var(--cream-100);
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 22px;
-  font-style: italic;
+.nav__brand { display: flex; align-items: center; }
+.nav__logo-img {
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;
 }
-.nav__brand-text { display: flex; flex-direction: column; line-height: 1.1; }
-.nav__brand-name { font-family: var(--font-display); font-size: 20px; font-weight: 500; letter-spacing: 0.01em; }
-.nav__brand-sub { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-500); }
 
 .nav__menu {
   display: flex;
@@ -348,7 +346,7 @@ button { font: inherit; border: 0; background: 0; cursor: pointer; color: inheri
 .hero__title {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(54px, 9vw, 132px);
+  font-size: clamp(44px, 7.5vw, 100px);
   line-height: 0.96;
   letter-spacing: -0.015em;
   margin: 0 0 28px;
@@ -372,7 +370,7 @@ button { font: inherit; border: 0; background: 0; cursor: pointer; color: inheri
 }
 
 .hero__lead {
-  font-size: clamp(16px, 1.4vw, 19px);
+  font-size: clamp(15px, 1.3vw, 17px);
   line-height: 1.65;
   color: rgba(251, 247, 242, 0.82);
   max-width: 56ch;
@@ -886,39 +884,6 @@ button { font: inherit; border: 0; background: 0; cursor: pointer; color: inheri
   color: rgba(251, 247, 242, 0.45);
   text-align: center;
   letter-spacing: 0.04em;
-}
-
-/* =========================================================
-   FLOATING WHATSAPP
-   ========================================================= */
-.wa-float {
-  position: fixed;
-  right: 22px;
-  bottom: 22px;
-  z-index: 60;
-  display: grid;
-  place-items: center;
-  width: 60px; height: 60px;
-  background: #25D366;
-  color: white;
-  border-radius: 50%;
-  box-shadow: 0 14px 36px rgba(37, 211, 102, 0.45);
-  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s;
-}
-.wa-float:hover {
-  transform: scale(1.08);
-  box-shadow: 0 18px 50px rgba(37, 211, 102, 0.55);
-}
-.wa-float__pulse {
-  position: absolute;
-  inset: -2px;
-  border-radius: 50%;
-  border: 2px solid #25D366;
-  animation: waPulse 2s infinite;
-}
-@keyframes waPulse {
-  0% { transform: scale(1); opacity: 0.7; }
-  100% { transform: scale(1.6); opacity: 0; }
 }
 
 /* =========================================================
