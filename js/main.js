@@ -1,0 +1,62 @@
+/* =========================================================
+   Dra. Maria Paula Bustamante — interactions
+   ========================================================= */
+
+(() => {
+  const nav = document.getElementById('nav');
+  const burger = document.getElementById('burger');
+  const drawer = document.getElementById('drawer');
+
+  // --- Sticky nav background on scroll ---
+  const onScroll = () => {
+    if (window.scrollY > 24) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // --- Mobile drawer ---
+  const closeDrawer = () => {
+    burger.classList.remove('is-open');
+    drawer.classList.remove('is-open');
+    document.body.style.overflow = '';
+  };
+  burger.addEventListener('click', () => {
+    const open = burger.classList.toggle('is-open');
+    drawer.classList.toggle('is-open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+
+  // --- Reveal on scroll ---
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // --- Footer year ---
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  // --- Subtle parallax on hero image ---
+  const heroImg = document.querySelector('.hero__media img');
+  if (heroImg && window.matchMedia('(min-width: 768px)').matches) {
+    let raf = null;
+    window.addEventListener('scroll', () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (y < window.innerHeight) {
+          heroImg.style.transform = `scale(1) translateY(${y * 0.18}px)`;
+        }
+        raf = null;
+      });
+    }, { passive: true });
+  }
+})();
