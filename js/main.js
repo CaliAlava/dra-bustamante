@@ -28,7 +28,8 @@
   });
   drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
 
-  // --- Reveal on scroll ---
+  // --- Revelación de elementos al hacer scroll (Intersection Observer) ---
+  // Añade la clase 'is-in' a los elementos con '.reveal' cuando entran al viewport
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -40,11 +41,8 @@
 
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // --- Footer year ---
-  const yearEl = document.getElementById('year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  // --- Subtle parallax on hero image ---
+  // --- Efecto Parallax sutil en la imagen del Hero ---
+  // Solo se activa en pantallas grandes para no afectar rendimiento móvil
   const heroImg = document.querySelector('.hero__media img');
   if (heroImg && window.matchMedia('(min-width: 768px)').matches) {
     let raf = null;

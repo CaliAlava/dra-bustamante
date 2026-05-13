@@ -833,58 +833,7 @@ button { font: inherit; border: 0; background: 0; cursor: pointer; color: inheri
 .info-card a { color: var(--gold-500); }
 .info-card a:hover { color: var(--gold-400); }
 
-/* =========================================================
-   FOOTER
-   ========================================================= */
-.footer {
-  background: var(--wine-900);
-  color: rgba(251, 247, 242, 0.65);
-  padding: 48px var(--gutter) 32px;
-  border-top: 1px solid rgba(251, 247, 242, 0.08);
-}
-.footer__inner {
-  max-width: var(--max);
-  margin-inline: auto;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 24px;
-}
-.footer__brand { display: flex; align-items: center; gap: 14px; }
-.footer__mark {
-  display: grid; place-items: center;
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  background: var(--wine-700);
-  color: var(--cream-100);
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-style: italic;
-}
-.footer__brand strong {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 500;
-  color: var(--cream-100);
-  letter-spacing: 0.005em;
-}
-.footer__brand span { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(251, 247, 242, 0.55); }
 
-.footer__links { display: flex; gap: 28px; }
-.footer__links a { font-size: 14px; transition: color .25s; }
-.footer__links a:hover { color: var(--gold-400); }
-
-.footer__legal {
-  grid-column: 1 / -1;
-  margin: 24px 0 0;
-  padding-top: 24px;
-  border-top: 1px solid rgba(251, 247, 242, 0.08);
-  font-size: 12px;
-  color: rgba(251, 247, 242, 0.45);
-  text-align: center;
-  letter-spacing: 0.04em;
-}
 
 /* =========================================================
    REVEAL ON SCROLL
@@ -914,9 +863,7 @@ button { font: inherit; border: 0; background: 0; cursor: pointer; color: inheri
   .g--wide { grid-column: span 2; }
   .g--tall { grid-row: span 1; }
   .contact__grid { grid-template-columns: 1fr; }
-  .footer__inner { grid-template-columns: 1fr; text-align: center; }
-  .footer__brand { justify-content: center; }
-  .footer__links { justify-content: center; }
+
 }
 
 @media (max-width: 640px) {
@@ -929,7 +876,7 @@ button { font: inherit; border: 0; background: 0; cursor: pointer; color: inheri
   .services__grid { grid-template-columns: 1fr; }
   .gallery__grid { grid-template-columns: 1fr; grid-auto-rows: 280px; }
   .g--wide { grid-column: span 1; }
-  .footer__links { flex-wrap: wrap; gap: 18px; }
+
   .whatsapp-card { grid-template-columns: 1fr; text-align: center; padding: 24px; }
   .whatsapp-card__icon { margin-inline: auto; }
   .whatsapp-card__num { font-size: 26px; }
