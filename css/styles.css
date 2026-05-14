@@ -605,13 +605,7 @@ button { font: inherit; border: 0; background: 0; cursor: pointer; color: inheri
   gap: 20px;
 }
 
-@keyframes shake-card {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-4px) rotate(-1deg); }
-  50% { transform: translateX(4px) rotate(1deg); }
-  75% { transform: translateX(-4px) rotate(-1deg); }
-  100% { transform: translateX(0); }
-}
+
 
 .service {
   position: relative;
@@ -624,14 +618,14 @@ button { font: inherit; border: 0; background: 0; cursor: pointer; color: inheri
 .service__inner {
   position: absolute;
   width: 100%; height: 100%;
-  transition: transform 0.6s cubic-bezier(.4, 0, .2, 1);
+  transition: transform 1.2s cubic-bezier(.4, 0, .2, 1);
   transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
   box-shadow: 0 4px 20px rgba(42, 16, 24, 0.05);
   border-radius: var(--radius);
 }
 .service:hover:not(.is-flipped) .service__inner {
-  animation: shake-card 0.4s cubic-bezier(.36,.07,.19,.97) both;
+  transform: rotateY(-12deg) scale(1.02);
 }
 .service.is-flipped .service__inner {
   transform: rotateY(180deg);
@@ -656,6 +650,7 @@ button { font: inherit; border: 0; background: 0; cursor: pointer; color: inheri
   align-items: center;
   text-align: center;
   transition: border-color .35s;
+  overflow: hidden;
 }
 .service__front::before, .service__back::before {
   content: "";
@@ -711,29 +706,30 @@ button { font: inherit; border: 0; background: 0; cursor: pointer; color: inheri
 .service__back h4 {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 22px;
+  font-size: 18px;
   color: var(--ink-900);
-  margin: 0 0 16px;
-  padding-bottom: 12px;
+  margin: 0 0 10px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--line);
 }
-.service__back p { margin: 0 0 18px; color: var(--ink-500); font-size: 15px; }
+.service__back p { margin: 0 0 10px; color: var(--ink-500); font-size: 13px; line-height: 1.4; }
 .service__back ul {
   list-style: none;
   padding: 0; margin: 0;
 }
 .service__back li {
-  font-size: 13.5px;
+  font-size: 12.5px;
   color: var(--ink-700);
-  padding: 6px 0;
+  padding: 4px 0;
   position: relative;
-  padding-left: 18px;
+  padding-left: 14px;
+  line-height: 1.35;
 }
 .service__back li::before {
   content: "";
   position: absolute;
-  left: 0; top: 14px;
-  width: 8px; height: 1px;
+  left: 0; top: 11px;
+  width: 6px; height: 1px;
   background: var(--wine-700);
 }
 

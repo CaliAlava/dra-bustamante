@@ -58,6 +58,20 @@
     }, { passive: true });
   }
 
+  // --- Service Cards Logic ---
+  const serviceCards = document.querySelectorAll('.service');
+  serviceCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const isCurrentlyFlipped = card.classList.contains('is-flipped');
+      // Remove is-flipped from all cards
+      serviceCards.forEach(c => c.classList.remove('is-flipped'));
+      // If it wasn't flipped before, flip it now
+      if (!isCurrentlyFlipped) {
+        card.classList.add('is-flipped');
+      }
+    });
+  });
+
   // --- Calendario e Interacciones ---
   const calPrev = document.getElementById('cal-prev');
   const calNext = document.getElementById('cal-next');
