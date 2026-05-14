@@ -141,6 +141,7 @@
             div.classList.add('selected');
             selectedDate = dateObj;
             renderSlots(dateObj);
+            document.querySelector('.agenda__container').classList.add('has-selection');
           });
         }
         
