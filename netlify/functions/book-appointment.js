@@ -70,9 +70,10 @@ exports.handler = async (event, context) => {
     };
   } catch (error) {
     console.error("Error creating calendar event", error);
+    const errorMessage = error.message || error.toString();
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Error al crear la cita en el calendario." }),
+      body: JSON.stringify({ error: `Error al crear la cita en el calendario: ${errorMessage}` }),
     };
   }
 };
