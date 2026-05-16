@@ -21,12 +21,11 @@ exports.handler = async (event, context) => {
       return { statusCode: 500, body: JSON.stringify({ error: "Configuración del servidor incompleta. Faltan variables de entorno." }) };
     }
 
-    const auth = new google.auth.JWT(
-      clientEmail,
-      null,
-      privateKey,
-      ['https://www.googleapis.com/auth/calendar.events']
-    );
+    const auth = new google.auth.JWT({
+      email: clientEmail,
+      key: privateKey,
+      scopes: ['https://www.googleapis.com/auth/calendar.events']
+    });
 
     // Intentar autorizar explícitamente para ver si la llave funciona
     await auth.authorize();
