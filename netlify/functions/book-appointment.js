@@ -48,9 +48,6 @@ exports.handler = async (event, context) => {
         dateTime: endDate.toISOString(),
         timeZone: 'America/Guayaquil',
       },
-      attendees: [
-        { email: email }
-      ],
       reminders: {
         useDefault: false,
         overrides: [
@@ -63,7 +60,6 @@ exports.handler = async (event, context) => {
     const response = await calendar.events.insert({
       calendarId: calendarId,
       resource: eventDetails,
-      sendUpdates: 'all' // Envía un correo de invitación al paciente
     });
 
     return {

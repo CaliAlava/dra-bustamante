@@ -296,7 +296,7 @@
 
           if (response.ok) {
             reserveSlot(selectedDateStrId, selectedTimeStr); // Marcar en UI localmente
-            alert('¡Reserva confirmada con éxito!\nRevisa tu correo para ver la invitación de Google Calendar.');
+            alert('¡Reserva confirmada con éxito!\nNos pondremos en contacto contigo pronto.');
             bookingModal.setAttribute('aria-hidden', 'true');
             bookingForm.reset();
             renderSlots(selectedDateObj);
