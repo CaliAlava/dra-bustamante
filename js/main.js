@@ -296,8 +296,18 @@
 
           if (response.ok) {
             reserveSlot(selectedDateStrId, selectedTimeStr); // Marcar en UI localmente
-            alert('¡Reserva confirmada con éxito!\nNos pondremos en contacto contigo pronto.');
             bookingModal.setAttribute('aria-hidden', 'true');
+            const successModal = document.getElementById('success-modal');
+            if (successModal) {
+              successModal.setAttribute('aria-hidden', 'false');
+              // Configurar para que al cerrar el modal de éxito, se resetee todo
+              const closeSuccessBtns = successModal.querySelectorAll('[data-micromodal-close]');
+              closeSuccessBtns.forEach(closeBtn => {
+                closeBtn.addEventListener('click', () => {
+                  successModal.setAttribute('aria-hidden', 'true');
+                });
+              });
+            }
             bookingForm.reset();
             renderSlots(selectedDateObj);
             if (confirmBtn) confirmBtn.disabled = true;
