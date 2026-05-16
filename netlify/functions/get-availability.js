@@ -33,28 +33,43 @@ exports.handler = async (event, context) => {
     const timeMin = `${date}T00:00:00-05:00`;
     const timeMax = `${date}T23:59:59-05:00`;
 
-    const response = await calendar.events.list({
-      calendarId: calendarId,
-      timeMin: timeMin,
-      timeMax: timeMax,
-      timeZone: 'America/Guayaquil',
-      singleEvents: true,
-      orderBy: 'startTime'
+    const response = await calendar.freebusy.query({
+      requestBody: {
+        timeMin: timeMin,
+        timeMax: timeMax,
+        timeZone: 'America/Guayaquil',
+        items: [{ id: calendarId }]
+      }
     });
 
-    const events = response.data.items || [];
+    const calendars = response.data.calendars || {};
+    const calendarData = calendars[calendarId] || {};
+    const busyPeriods = calendarData.busy || [];
     
-    // Extraer las horas de los eventos. 
-    // event.start.dateTime usualmente tiene el formato: "YYYY-MM-DDTHH:mm:ss-05:00"
-    const busySlots = events.map(event => {
-      if (event.start && event.start.dateTime) {
-        const timePart = event.start.dateTime.split('T')[1];
-        if (timePart) {
-          return timePart.substring(0, 5); // Ej. "10:00"
-        }
+    const allSlots = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
+    const busySlots = [];
+
+    // Validar cada hora contra los periodos ocupados
+    allSlots.forEach(slot => {
+      const slotStartStr = `${date}T${slot}:00-05:00`;
+      const slotStart = new Date(slotStartStr).getTime();
+      
+      // Asumimos que cada cita dura 1 hora
+      const slotEnd = slotStart + 60 * 60 * 1000;
+      
+      // Verificar si este horario se solapa con algún periodo ocupado
+      const isOverlapping = busyPeriods.some(period => {
+        const busyStart = new Date(period.start).getTime();
+        const busyEnd = new Date(period.end).getTime();
+        
+        // Se solapan si: Inicio de A < Fin de B Y Fin de A > Inicio de B
+        return slotStart < busyEnd && slotEnd > busyStart;
+      });
+      
+      if (isOverlapping) {
+        busySlots.push(slot);
       }
-      return null;
-    }).filter(time => time !== null);
+    });
 
     return {
       statusCode: 200,
