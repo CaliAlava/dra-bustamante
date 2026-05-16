@@ -95,21 +95,6 @@
     currentDate.setDate(1);
     
     let selectedDate = null;
-    let reservations = JSON.parse(localStorage.getItem('draBustamanteReservations')) || {};
-
-    const saveReservations = () => {
-      localStorage.setItem('draBustamanteReservations', JSON.stringify(reservations));
-    };
-
-    const isReserved = (dateStr, time) => {
-      return reservations[dateStr] && reservations[dateStr].includes(time);
-    };
-
-    const reserveSlot = (dateStr, time) => {
-      if (!reservations[dateStr]) reservations[dateStr] = [];
-      reservations[dateStr].push(time);
-      saveReservations();
-    };
 
     const renderCalendar = () => {
       calDays.innerHTML = '';
@@ -173,7 +158,7 @@
       }
     };
     
-    const renderSlots = (dateObj) => {
+    const renderSlots = async (dateObj) => {
       slotsContainer.innerHTML = '';
       const dayOfWeek = dateObj.getDay();
       
@@ -206,6 +191,30 @@
         `;
         return;
       }
+
+      selectedTimeStr = null;
+      selectedDateObj = dateObj;
+      selectedDateStrId = dateStrId;
+      selectedDateStrFormat = dateStrFormat;
+
+      // Mostrar estado de carga
+      slotsContainer.innerHTML = '<p class="slots__loading">Cargando horarios disponibles...</p>';
+      
+      let busySlots = [];
+      try {
+        const res = await fetch(`/.netlify/functions/get-availability?date=${dateStrId}`);
+        if (res.ok) {
+          const data = await res.json();
+          busySlots = data.busySlots || [];
+        } else {
+          console.error("Error fetching availability:", await res.text());
+        }
+      } catch (err) {
+        console.error("Network error fetching availability:", err);
+      }
+      
+      // Limpiar contenedor
+      slotsContainer.innerHTML = '';
       
       // Lunes a Viernes (10:00 - 19:00 -> 10:00 a 18:00 slots)
       const hours = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
@@ -214,17 +223,13 @@
         confirmBtn.disabled = true;
         confirmBtn.style.display = 'flex'; // Mostrarlo si estaba oculto
       }
-      selectedTimeStr = null;
-      selectedDateObj = dateObj;
-      selectedDateStrId = dateStrId;
-      selectedDateStrFormat = dateStrFormat;
       
       hours.forEach(time => {
         const btn = document.createElement('button');
         btn.className = 'slot-btn';
         btn.textContent = time;
         
-        if (isReserved(dateStrId, time)) {
+        if (busySlots.includes(time)) {
           btn.disabled = true;
           btn.textContent += ' (Reservado)';
         }
@@ -295,7 +300,6 @@
           const result = await response.json();
 
           if (response.ok) {
-            reserveSlot(selectedDateStrId, selectedTimeStr); // Marcar en UI localmente
             bookingModal.setAttribute('aria-hidden', 'true');
             const successModal = document.getElementById('success-modal');
             if (successModal) {
