@@ -9,12 +9,12 @@ exports.handler = async (event, context) => {
     const { name, email, phone, date, time } = JSON.parse(event.body);
 
     // Requerimos variables de entorno en Netlify
-    // GOOGLE_SERVICE_ACCOUNT_EMAIL
-    // GOOGLE_PRIVATE_KEY
-    // GOOGLE_CALENDAR_ID
     const calendarId = process.env.GOOGLE_CALENDAR_ID;
     const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-    const privateKey = process.env.GOOGLE_PRIVATE_KEY ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') : '';
+    let privateKey = process.env.GOOGLE_PRIVATE_KEY || '';
+    
+    // Limpiar la clave por si se pegó con comillas o tiene saltos de línea literales
+    privateKey = privateKey.replace(/\\n/g, '\n').replace(/^"|"$/g, '').trim();
 
     if (!calendarId || !clientEmail || !privateKey) {
       console.error("Missing Google Credentials");
@@ -27,6 +27,9 @@ exports.handler = async (event, context) => {
       privateKey,
       ['https://www.googleapis.com/auth/calendar.events']
     );
+
+    // Intentar autorizar explícitamente para ver si la llave funciona
+    await auth.authorize();
 
     const calendar = google.calendar({ version: 'v3', auth });
 
