@@ -321,6 +321,41 @@
         <div id="slots-container" class="slots__list">
           <div class="slots__empty">Selecciona un día en el calendario para ver los horarios.</div>
         </div>
+        
+        <div class="slots__action">
+          <button id="confirm-slot-btn" class="btn btn--primary btn--full" disabled>Confirmar reserva</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popup de Reserva -->
+    <div id="booking-modal" class="booking-modal" aria-hidden="true">
+      <div class="booking-modal__overlay" tabindex="-1" data-micromodal-close></div>
+      <div class="booking-modal__container" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title">
+        <header class="booking-modal__header">
+          <h2 class="booking-modal__title" id="booking-modal-title">
+            Completa tu reserva
+          </h2>
+          <button class="booking-modal__close" aria-label="Cerrar ventana" data-micromodal-close></button>
+        </header>
+        <main class="booking-modal__content" id="booking-modal-content">
+          <p class="booking-modal__details" id="booking-details-text">Seleccionaste el -- a las --</p>
+          <form id="booking-form" class="booking-form">
+            <div class="form-group">
+              <label for="patient-name">Nombre completo</label>
+              <input type="text" id="patient-name" name="name" required placeholder="Ej. Ana Pérez" />
+            </div>
+            <div class="form-group">
+              <label for="patient-email">Correo electrónico</label>
+              <input type="email" id="patient-email" name="email" required placeholder="tu@correo.com" />
+            </div>
+            <div class="form-group">
+              <label for="patient-phone">Teléfono / WhatsApp</label>
+              <input type="tel" id="patient-phone" name="phone" required placeholder="099..." />
+            </div>
+            <button type="submit" class="btn btn--primary btn--full" id="submit-booking-btn">Agendar cita</button>
+          </form>
+        </main>
       </div>
     </div>
   </section>

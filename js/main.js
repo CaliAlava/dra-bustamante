@@ -79,6 +79,16 @@
   const calDays = document.getElementById('cal-days');
   const slotsDate = document.getElementById('slots-date');
   const slotsContainer = document.getElementById('slots-container');
+  const confirmBtn = document.getElementById('confirm-slot-btn');
+  const bookingModal = document.getElementById('booking-modal');
+  const closeModalBtns = document.querySelectorAll('[data-micromodal-close]');
+  const bookingForm = document.getElementById('booking-form');
+  const bookingDetailsText = document.getElementById('booking-details-text');
+  
+  let selectedTimeStr = null;
+  let selectedDateObj = null;
+  let selectedDateStrId = null;
+  let selectedDateStrFormat = null;
 
   if (calDays) {
     let currentDate = new Date();
@@ -177,6 +187,11 @@
       
       slotsDate.textContent = dateStrFormat;
       
+      if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.style.display = 'none';
+      }
+      
       if (dayOfWeek === 6) {
         // Sábado
         slotsContainer.innerHTML = `
@@ -195,6 +210,15 @@
       // Lunes a Viernes (10:00 - 19:00 -> 10:00 a 18:00 slots)
       const hours = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
       
+      if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.style.display = 'flex'; // Mostrarlo si estaba oculto
+      }
+      selectedTimeStr = null;
+      selectedDateObj = dateObj;
+      selectedDateStrId = dateStrId;
+      selectedDateStrFormat = dateStrFormat;
+      
       hours.forEach(time => {
         const btn = document.createElement('button');
         btn.className = 'slot-btn';
@@ -208,30 +232,12 @@
         btn.addEventListener('click', () => {
           document.querySelectorAll('.slot-btn.selected').forEach(el => el.classList.remove('selected'));
           btn.classList.add('selected');
+          selectedTimeStr = time;
+          if (confirmBtn) confirmBtn.disabled = false;
         });
         
         slotsContainer.appendChild(btn);
       });
-      
-      const actionDiv = document.createElement('div');
-      actionDiv.className = 'slots__action';
-      const confirmBtn = document.createElement('button');
-      confirmBtn.className = 'btn btn--primary';
-      confirmBtn.textContent = 'Confirmar reserva';
-      confirmBtn.addEventListener('click', () => {
-        const selectedSlot = document.querySelector('.slot-btn.selected');
-        if (selectedSlot) {
-          const time = selectedSlot.textContent;
-          reserveSlot(dateStrId, time);
-          alert(`Reserva confirmada para el ${dateStrFormat} a las ${time}`);
-          renderSlots(dateObj); // Refrescar para deshabilitar
-        } else {
-          alert('Por favor selecciona un horario.');
-        }
-      });
-      
-      actionDiv.appendChild(confirmBtn);
-      slotsContainer.appendChild(actionDiv);
     };
 
     calPrev.addEventListener('click', () => {
@@ -245,5 +251,67 @@
     });
 
     renderCalendar();
+    
+    // --- Lógica del Pop-up (Modal) ---
+    if (confirmBtn && bookingModal) {
+      confirmBtn.addEventListener('click', () => {
+        if (!selectedTimeStr) return;
+        bookingDetailsText.textContent = `Seleccionaste el ${selectedDateStrFormat} a las ${selectedTimeStr}`;
+        bookingModal.setAttribute('aria-hidden', 'false');
+      });
+
+      closeModalBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          bookingModal.setAttribute('aria-hidden', 'true');
+        });
+      });
+
+      bookingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const btn = document.getElementById('submit-booking-btn');
+        const originalText = btn.textContent;
+        btn.textContent = 'Enviando...';
+        btn.disabled = true;
+
+        const name = document.getElementById('patient-name').value;
+        const email = document.getElementById('patient-email').value;
+        const phone = document.getElementById('patient-phone').value;
+
+        try {
+          // Llamada a la Netlify Function real
+          const response = await fetch('/.netlify/functions/book-appointment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name,
+              email,
+              phone,
+              date: selectedDateStrId,
+              time: selectedTimeStr
+            })
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            reserveSlot(selectedDateStrId, selectedTimeStr); // Marcar en UI localmente
+            alert('¡Reserva confirmada con éxito!\nRevisa tu correo para ver la invitación de Google Calendar.');
+            bookingModal.setAttribute('aria-hidden', 'true');
+            bookingForm.reset();
+            renderSlots(selectedDateObj);
+            if (confirmBtn) confirmBtn.disabled = true;
+          } else {
+            alert('Hubo un problema al procesar la reserva: ' + (result.error || 'Inténtalo de nuevo.'));
+          }
+        } catch (error) {
+          console.error(error);
+          alert('Hubo un error de conexión. Inténtalo más tarde.');
+        } finally {
+          btn.textContent = originalText;
+          btn.disabled = false;
+        }
+      });
+    }
   }
 })();
